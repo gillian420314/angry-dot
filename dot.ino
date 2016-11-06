@@ -17,22 +17,20 @@ int y1 = 22;
 int x2 = 26;
 int y2 = 22;
 int i = 0;
-int r;
+//int r;
 Adafruit_SSD1306 display(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
 
 static const unsigned char PROGMEM DOT[] = {
-  0x3f,0x3f,
-  0x7f,0xff,
-  0xff,0xff,
-  0x7f,0xff,
-  0x3f,0x3f,
+  0x7e,
+  0xff,
+  0xff,
+  0x7e,
 };
 static const unsigned char PROGMEM SQUARE[] = {
-  0xff,0xff,
-  0xff,0xff,
-  0xff,0xff,
-  0xff,0xff,
-  0xff,0xff,
+  0xff,
+  0xff,
+  0xff,
+  0xff,
 };
 
 void gameover(){
@@ -67,55 +65,57 @@ void change(){
   display.display(); 
 }
 void square(){
-  display.drawBitmap(x1, y1, SQUARE, 10, 5,WHITE); 
+  display.drawBitmap(x1, y1, SQUARE, 8, 4,WHITE); 
   display.display();
   //delay(15);
   //display.clearDisplay();
 }
  
 void dot(){
-  display.drawBitmap(x2, y2, DOT, 10, 5,WHITE);
+  display.drawLine(25,0,25,26,WHITE);
+  display.drawLine(0,26,128,26,WHITE);
+  display.drawBitmap(x2, y2, DOT, 8, 4,WHITE);
   display.display();
   delay(15);
   display.clearDisplay();
   score();//call score
   change();
   square();//call square
-  x1-=r;
+  x1-=2;
 }
 void jump(){
    while(y2>2){ 
     dot();
     y2-=2;
-    Serial.println(x1);
+    Serial.println(y2);
    }
    if(y2<=2) y2=2;
    while(y2<22){ 
     dot(); 
         y2+=2; 
-        Serial.println(x1);
+        Serial.println(y2);
       }
-
 }
-
 void setup() {
   Serial.begin(9600);
   display.begin(SSD1306_SWITCHCAPVCC);
   pinMode(Button, INPUT);
-  randomSeed(analogRead(0)); 
+  //randomSeed(analogRead(0)); 
+  
 }
-
 void loop() {
+  
   //change();
   buttonState = digitalRead(Button);
   if ( buttonState == HIGH ){ jump(); }
-  dot();  Serial.println(x1); 
-  r = random(1, 10);
+  dot();  Serial.println(y2); 
+  //r = random(1, 10);
   if(x1<=0) {i++;change();x1=128;}
   
-  if ( (x1>24 && x1<32) && y2>18) youlose();
-  //if(y2+5>y1+5 && (x1-10) < x2+10 && (x1+10) >x2-10) youlose();
-  //if ( (x1>24 && x1<32) ) youlose();
-  //if ( x1>26 && x1<30 ) youlose();
-  if ( y2>18 && y2<22 ) youlose(); 
+  //if ( (x1>26 && x1<34) && (y2+4<=y1)) youlose();
+  //if ( (x1>26 && x1<34) || y1>=y2+4 ) youlose();
+  //if(y2-4>y1-4 && x1 < x2+8 && x1+8 > x2) youlose();
+  //if ( x1>26 && x1<36 ) youlose();
+  if ( x1>26 && x1<33 ) youlose();
+  //if ( y2==22 ) youlose(); 
 }
