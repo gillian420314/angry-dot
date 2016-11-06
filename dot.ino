@@ -110,12 +110,11 @@ void loop() {
   buttonState = digitalRead(Button);
   if ( buttonState == HIGH ){ jump(); }
   dot();  Serial.println(x1); 
-  r = random(1, 8);
-  if(x1<=0) {x1=128;}
-  if(x1<=-30) {i++;change();}
+  r = random(1, 10);
+  if(x1<=0) {i++;change();x1=128;}
   
   if ( (x1>24 && x1<32) && y2>18) youlose();
-  
+  //if(y2+5>y1+5 && (x1-10) < x2+10 && (x1+10) >x2-10) youlose();
   //if ( (x1>24 && x1<32) ) youlose();
   //if ( x1>26 && x1<30 ) youlose();
   if ( y2>18 && y2<22 ) youlose(); 
